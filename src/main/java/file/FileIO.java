@@ -19,19 +19,14 @@ import java.util.Arrays;
 import org.json.JSONObject;
 
 public class FileIO {
-	private String source = new String();
-	
-	public FileIO(String source){
-		this.source = source;
-	}
 	
 	public void createFolder(String folderPath) {
-		File dir = new File(source + folderPath);
+		File dir = new File(folderPath);
 		dir.mkdir();
 	}
 	
 	public void clearFolder(String folderPath){
-		Path dir = Paths.get(source + folderPath);
+		Path dir = Paths.get(folderPath);
 		
 		if(!Files.exists(dir)) {
 			createFolder(folderPath);
@@ -86,7 +81,7 @@ public class FileIO {
 	
 	public void writeString(String filePath, String content) {
 		try {
-			appendFile(source + filePath + ".txt", content);
+			appendFile(filePath + ".txt", content);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -113,14 +108,12 @@ public class FileIO {
 	public ArrayList<String> readList(String filePath) {
 		ArrayList<String> content;
 		content = new ArrayList<>(Arrays.asList(readFile(filePath + ".txt").split("\n")));
-		//System.out.println(content);
 		return content;
 	}
 	
 	public JSONObject readJson(String filePath) {
 		JSONObject content;
 		content =  new JSONObject(readFile(filePath + ".txt"));
-		//System.out.println(content);
 		return content;
 	}
 }

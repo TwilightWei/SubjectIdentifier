@@ -1,6 +1,7 @@
 package main.java;
 
 import java.util.ArrayList;
+import java.util.Map.Entry;
 
 import org.json.JSONObject;
 
@@ -11,13 +12,25 @@ import main.java.file.FileIO;
 public class SubjectIdentifier {
 	public static void main(String[] args) {
 		ConfigReader configReader = new ConfigReader();
-		Compare compare = new Compare();
+		Compare comparer = new Compare();
 		FileIO fileIO;
 		ArrayList<String> classAPIData;
+		ArrayList<String> methodAPIData;
+		ArrayList<String> fieldAPIData;
 		ArrayList<String> depClassAPIData;
-		JSONObject classAPIUsage;
-		ArrayList<String> classOverlaps;
-		ArrayList<String> depClassOverlaps;
+		ArrayList<String> depMethodAPIData;
+		ArrayList<String> depFieldAPIData;
+		
+		JSONObject classAPIUsages;
+		ArrayList<String> methodAPIUsages;
+		JSONObject fieldAPIUsages;
+		
+		ArrayList<String> classResults;
+		ArrayList<String> depClassResults;
+		
+		ArrayList<String> methodResults;
+		ArrayList<String> depMethodResults;
+		
 		String apiusage = new String();
 		String apidata = new String();
 		
@@ -25,16 +38,40 @@ public class SubjectIdentifier {
 		
 		apidata = configReader.readConfig(configPath, "apidata");
 		apiusage = configReader.readConfig(configPath, "apiusage");
-		fileIO = new FileIO(apiusage);
+		fileIO = new FileIO();
 		
 		classAPIData = fileIO.readList(apidata + "\\APIData\\Class");
-		classAPIUsage = fileIO.readJson(apiusage + "\\APIUsage\\Class");
+		classAPIUsages = fileIO.readJson(apiusage + "\\APIUsage\\Class");
+		
+		methodAPIData = fileIO.readList(apidata + "\\APIData\\Method");
+		methodAPIUsages = fileIO.readList(apiusage + "\\APIUsage\\MethodList");
+		
+		fieldAPIData = fileIO.readList(apidata + "\\APIData\\Field");
+		fieldAPIUsages = fileIO.readJson(apiusage + "\\APIUsage\\Field");
 		
 		depClassAPIData = fileIO.readList(apidata + "\\APIData\\DeprecatedClass");
+		depMethodAPIData = fileIO.readList(apidata + "\\APIData\\DeprecatedMethod");
+		depFieldAPIData = fileIO.readList(apidata + "\\APIData\\DeprecatedField");
 		
-		classOverlaps = compare.usedAPI(classAPIData, classAPIUsage);
-		depClassOverlaps = compare.usedAPI(depClassAPIData, classAPIUsage);
+		classResults = comparer.compareClass(classAPIData, classAPIUsages);
+		depClassResults = comparer.compareClass(depClassAPIData, classAPIUsages);
 		
+		methodResults = comparer.compareMethod(methodAPIData, methodAPIUsages);
+		depMethodResults = comparer.compareMethod(depMethodAPIData, methodAPIUsages);
 		
+		fileIO.clearFolder(apiusage + "\\Result");
+		for(String classResult : classResults){
+			fileIO.writeString(apiusage + "\\Result\\Class", classResult);
+		}
+		for(String depClassResult : depClassResults){
+			fileIO.writeString(apiusage + "\\Result\\DeprecatedClass", depClassResult);
+		}
+		for(String methodResult : methodResults){
+			fileIO.writeString(apiusage + "\\Result\\Method", methodResult);
+		}
+		for(String depMethodResult : depMethodResults){
+			fileIO.writeString(apiusage + "\\Result\\DeprecatedMethod", depMethodResult);
+		}
+		System.out.println("Finished");
 	}
 }
