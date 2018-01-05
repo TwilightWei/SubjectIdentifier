@@ -31,6 +31,9 @@ public class SubjectIdentifier {
 		ArrayList<String> methodResults;
 		ArrayList<String> depMethodResults;
 		
+		ArrayList<String> fieldResults;
+		ArrayList<String> depFieldResults;
+		
 		String apiusage = new String();
 		String apidata = new String();
 		
@@ -42,10 +45,8 @@ public class SubjectIdentifier {
 		
 		classAPIData = fileIO.readList(apidata + "\\APIData\\Class");
 		classAPIUsages = fileIO.readJson(apiusage + "\\APIUsage\\Class");
-		
 		methodAPIData = fileIO.readList(apidata + "\\APIData\\Method");
 		methodAPIUsages = fileIO.readList(apiusage + "\\APIUsage\\MethodList");
-		
 		fieldAPIData = fileIO.readList(apidata + "\\APIData\\Field");
 		fieldAPIUsages = fileIO.readJson(apiusage + "\\APIUsage\\Field");
 		
@@ -59,6 +60,9 @@ public class SubjectIdentifier {
 		methodResults = comparer.compareMethod(methodAPIData, methodAPIUsages);
 		depMethodResults = comparer.compareMethod(depMethodAPIData, methodAPIUsages);
 		
+		fieldResults = comparer.compareField(fieldAPIData, fieldAPIUsages);
+		depFieldResults = comparer.compareField(depFieldAPIData, fieldAPIUsages);
+		
 		fileIO.clearFolder(apiusage + "\\Result");
 		for(String classResult : classResults){
 			fileIO.writeString(apiusage + "\\Result\\Class", classResult);
@@ -71,6 +75,12 @@ public class SubjectIdentifier {
 		}
 		for(String depMethodResult : depMethodResults){
 			fileIO.writeString(apiusage + "\\Result\\DeprecatedMethod", depMethodResult);
+		}
+		for(String fieldResult : fieldResults){
+			fileIO.writeString(apiusage + "\\Result\\Field", fieldResult);
+		}
+		for(String depFieldResult : depFieldResults){
+			fileIO.writeString(apiusage + "\\Result\\DeprecatedField", depFieldResult);
 		}
 		System.out.println("Finished");
 	}

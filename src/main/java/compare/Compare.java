@@ -21,11 +21,11 @@ public class Compare {
 			if(methodAPIData.contains(methodAPIUsage)) {
 				//matches.add(methodAPIUsage);
 			} else {
-				boolean c1 = false;
-				boolean c2 = false;
+				/*boolean c1 = false;
+				boolean c2 = false;*/
 				for(String methodAPIDatum: methodAPIData) {
 					if(methodAPIDatum.substring(0, methodAPIDatum.indexOf("(")).equals(methodAPIUsage.substring(0, methodAPIUsage.indexOf("(")))) {
-						c1 = true;
+						//c1 = true;
 						boolean hasPoints = true;
 						boolean check = true;
 						String usageParas = methodAPIUsage.substring(methodAPIUsage.indexOf("("));
@@ -77,14 +77,24 @@ public class Compare {
 						if(check) {
 							matches.add(methodAPIUsage);
 							matches.add(methodAPIDatum);
-							c2 = true;
+							//c2 = true;
 							break;
 						}
 					}
 				}
-				if(c1==true && c2==false) {
-					//matches.add(methodAPIUsage);
-				}
+				/*if(c1==true && c2==false) {
+					matches.add(methodAPIUsage);
+				}*/
+			}
+		}
+		return matches;
+	}
+	
+	public ArrayList<String> compareField(ArrayList<String> fieldAPIData, JSONObject fieldAPIUsages) {
+		ArrayList<String> matches = new ArrayList<String>();
+		for(String fieldDatum: fieldAPIData) {
+			if(fieldAPIUsages.has(fieldDatum)) {
+				matches.add(fieldDatum);
 			}
 		}
 		return matches;
