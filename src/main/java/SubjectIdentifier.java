@@ -1,8 +1,6 @@
 package main.java;
 
 import java.util.ArrayList;
-import java.util.Map.Entry;
-
 import org.json.JSONObject;
 
 import main.java.compare.Compare;
